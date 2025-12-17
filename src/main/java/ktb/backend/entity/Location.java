@@ -19,4 +19,8 @@ public class Location {
 
     @Column(columnDefinition = "TEXT")
     private String detail;
+
+    @OneToOne
+    @JoinColumn(name = "information_id")
+    private Information information;
 }

@@ -26,4 +26,11 @@ public class Information extends BaseEntity{
     private int age;
 
     private Gender gender;
+
+    @OneToOne
+    @JoinColumn(name = "report_id")
+    private Report report;
+
+    @OneToOne(mappedBy = "information")
+    private Location location;
 }
