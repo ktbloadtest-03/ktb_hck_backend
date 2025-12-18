@@ -31,6 +31,6 @@ public class ImageCommandFacade {
                 .map(img -> imageService.saveImage()).toList();
 
         eventPublisher.publishEvent(new ImageUploadEvent(imageFiles, imageEntities));
-
+        return aiServerResponse;
     }
 }

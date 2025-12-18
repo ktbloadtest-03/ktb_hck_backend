@@ -27,6 +27,7 @@ repositories {
 dependencies {
     // Web
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation "org.springframework.boot:spring-boot-starter-web"
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -57,6 +58,9 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1'
     implementation platform('software.amazon.awssdk:bom:2.25.46')
     implementation 'software.amazon.awssdk:s3'
+
+    // Email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
