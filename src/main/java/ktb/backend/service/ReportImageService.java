@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReportImageService {
-    private ReportImageRepository reportImageRepository;
+    private final ReportImageRepository reportImageRepository;
 
     public Map<Long, List<Long>> findAllByReportId(List<Long> reportIds) {
         List<ReportImage> reportImages =  reportImageRepository.findAllByReportId(reportIds);
