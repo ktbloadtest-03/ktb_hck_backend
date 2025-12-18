@@ -39,9 +39,8 @@ jobs:
       - name: Run tests
         run: ./gradlew test
         env:
-          # RDS 연결 정보 (테스트용 RDS 또는 로컬 H2 사용 권장)
 
-          실제 RDS 정보 (통합 테스트 시 사용)
+
           MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
           MYSQL_HOST: ${{ secrets.RDS_HOST }}
