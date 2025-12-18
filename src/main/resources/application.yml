@@ -36,3 +36,8 @@ springdoc:
     path: /swagger-ui.html
     display-request-duration: true
     persistAuthorization: true
+
+
+ai:
+  server:
+    url: {AI_SERVER_URL:test@url.com}

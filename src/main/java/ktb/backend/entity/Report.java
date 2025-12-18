@@ -21,7 +21,7 @@ public class Report extends BaseEntity{
 
     private LocalDateTime caseTime;
 
-    @OneToOne(mappedBy = "information")
+    @OneToOne(mappedBy = "report")
     private Location location;
 
     @Column(columnDefinition = "TEXT")
