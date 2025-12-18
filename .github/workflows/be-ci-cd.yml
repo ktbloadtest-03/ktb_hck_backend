@@ -66,6 +66,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Debug Docker username
+      - run: echo "DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}'"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
