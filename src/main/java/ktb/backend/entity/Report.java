@@ -15,6 +15,7 @@ public class Report extends BaseEntity{
     @Id
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private ReportType reportType;
 
     private LocalDateTime caseTime;
@@ -36,6 +37,7 @@ public class Report extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private AnimalType types;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private String species;
