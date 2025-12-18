@@ -48,20 +48,21 @@ public class ImageCommandFacade {
     }
 
     @Transactional
-    public void analyzeScores(List<MultipartFile> imageFiles, Report report) {
+    public void analyzeScores(List<MultipartFile> imageFiles, Report foundReport) {
         AiScoreResponse[] aiScoreResponses = aiService.score(imageFiles);
 
         List<ReportImage> imageEntities = imageFiles.stream()
-            .map(img -> reportImageService.saveReportImage(report))
+            .map(img -> reportImageService.saveReportImage(foundReport))
             .toList();
 
         Arrays.stream(aiScoreResponses)
                 .filter(response -> response.score() >= 0.3)
                 .forEach(response -> {
-                    Report missingReport = reportRepository.findById(response.id())
-                        .orElseThrow(() -> new RuntimeException("NOT_FOUND_REPORT"));
-                    log.info("{}", response.toString());
-                    eventPublisher.publishEvent(new LostPetFoundEvent(missingReport, imageFiles.getFirst()));
+                    Report missingReport = reportRepository.findById(response.id()).orElse(null);
+                    if (missingReport != null) {
+                        log.info("{}", response.toString());
+                        eventPublisher.publishEvent(new LostPetFoundEvent(missingReport, imageFiles.getFirst()));
+                    }
                 });
     }
 }
