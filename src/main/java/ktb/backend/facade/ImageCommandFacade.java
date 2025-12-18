@@ -6,9 +6,12 @@ import ktb.backend.dto.AiServerResponse;
 import ktb.backend.entity.Report;
 import ktb.backend.entity.ReportImage;
 import ktb.backend.events.ImageUploadEvent;
+import ktb.backend.events.LostPetFoundEvent;
+import ktb.backend.repository.ReportRepository;
 import ktb.backend.service.AiService;
 import ktb.backend.service.ImageService;
 import ktb.backend.service.ReportImageService;
+import ktb.backend.service.ReportService;
 import ktb.backend.utils.Snowflake;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ public class ImageCommandFacade {
     private final ApplicationEventPublisher eventPublisher;
     private final ImageService imageService;
     private final ReportImageService reportImageService;
+    private final ReportRepository reportRepository;
 
     private final Snowflake snowflake;
 
@@ -51,9 +55,13 @@ public class ImageCommandFacade {
             .map(img -> reportImageService.saveReportImage(report))
             .toList();
 
-        Arrays.stream(aiScoreResponses).forEach(aiScoreResponse -> {
-            log.info("{}", aiScoreResponse.toString());
-        });
-        // TODO: 이메일 전송
+        Arrays.stream(aiScoreResponses)
+                .filter(response -> response.score() >= 0.3)
+                .forEach(response -> {
+                    Report missingReport = reportRepository.findById(response.id())
+                        .orElseThrow(() -> new RuntimeException("NOT_FOUND_REPORT"));
+                    log.info("{}", response.toString());
+                    eventPublisher.publishEvent(new LostPetFoundEvent(missingReport, imageFiles.getFirst()));
+                });
     }
 }
