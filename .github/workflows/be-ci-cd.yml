@@ -98,9 +98,10 @@ jobs:
 
       - name: Deploy via Bastion
         run: |
-          ssh -i ~/.ssh/id_rsa \
-            -J ${{ secrets.SERVER_USER }}@${{ secrets.BASTION_HOST }} \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_rsa \
+              -J ${{ secrets.SERVER_USER }}@${{ secrets.BASTION_HOST }} \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
 
             # 1. Docker 설치 (최초 1회)
             if ! command -v docker &> /dev/null; then
