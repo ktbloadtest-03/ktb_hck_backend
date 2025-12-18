@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import ktb.backend.dto.ListResponse;
 import ktb.backend.dto.response.ImageUrlResponse;
 import ktb.backend.service.ImageService;
+import ktb.backend.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ImageController {
-    private final ImageService imageService;
+    private final S3Service s3Service;
 
     @PostMapping("/images/urls")
-    public ResponseEntity<ListResponse<ImageUrlResponse>> getPresignedUrl(@RequestBody List<Long> imageIds) {
-        imageService.ge
+    public ResponseEntity<ImageUrlResponse> getPresignedUrl(@RequestBody List<Long> imageIds) {
+        return ResponseEntity.ok(s3Service.getPresignedUrls(imageIds));
     }
 }

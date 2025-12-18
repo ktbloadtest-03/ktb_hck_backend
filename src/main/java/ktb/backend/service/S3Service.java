@@ -48,8 +48,11 @@ public class S3Service {
         s3Client.putObject(request, RequestBody.fromBytes(bytes));
     }
 
-    public List<ImageUrlResponse> getPresignedUrls(List<Long> imageEntityIds) {
-
+    public ImageUrlResponse getPresignedUrls(List<Long> imageEntityIds) {
+        List<String> urls = imageEntityIds.stream()
+                .map(imageId -> getPreSignedUrl(PET_IMAGE_FOLDER, imageId.toString()))
+                .toList();
+        return ImageUrlResponse.from(urls);
     }
 
     private String buildKey(String folder, Long imageId) {
