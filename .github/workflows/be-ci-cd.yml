@@ -40,25 +40,18 @@ jobs:
         run: ./gradlew test
         env:
           # RDS 연결 정보 (테스트용 RDS 또는 로컬 H2 사용 권장)
-          SPRING_PROFILES_ACTIVE: test
-          SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
-          SPRING_DATASOURCE_USERNAME: sa
-          SPRING_DATASOURCE_PASSWORD:
-          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-          SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.H2Dialect
 
-          # 실제 RDS 정보 (통합 테스트 시 사용)
-          # MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
-          # MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
-          # MYSQL_HOST: ${{ secrets.RDS_HOST }}
-          # MYSQL_PORT: ${{ secrets.RDS_PORT }}
-          # MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
+          실제 RDS 정보 (통합 테스트 시 사용)
+          MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          MYSQL_HOST: ${{ secrets.RDS_HOST }}
+          MYSQL_PORT: ${{ secrets.RDS_PORT }}
+          MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
 
           # AWS S3 설정 (필요한 경우)
-          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
-          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+#          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
+#          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
+#          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
 
       - name: Build application JAR
         run: ./gradlew bootJar
