@@ -39,8 +39,6 @@ jobs:
       - name: Run tests
         run: ./gradlew build -x test
         env:
-
-
           MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
           MYSQL_HOST: ${{ secrets.RDS_HOST }}
@@ -48,9 +46,9 @@ jobs:
           MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
 
           # AWS S3 설정 (필요한 경우)
-#          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
-#          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
-#          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      #          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
+      #          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
+      #          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
 
       - name: Build application JAR
         run: ./gradlew bootJar
@@ -68,6 +66,22 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Check Docker installation
+        run: |
+          if command -v docker &> /dev/null; then
+            echo "Docker is already installed"
+            docker --version
+          else
+            echo "Docker is not installed. Installing Docker..."
+            # Ubuntu에서 Docker 설치
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            echo "Docker installation completed"
+            docker --version
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v4
 
