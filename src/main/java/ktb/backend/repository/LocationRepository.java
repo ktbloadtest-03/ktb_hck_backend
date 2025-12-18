@@ -1,5 +1,6 @@
 package ktb.backend.repository;
 
+import ktb.backend.dto.LocationCoordinatesProjection;
 import ktb.backend.entity.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
