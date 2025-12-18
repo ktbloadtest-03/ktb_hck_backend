@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ktb.backend.dto.AiFlyerRequest;
 import ktb.backend.dto.AiServerResponse;
 import ktb.backend.dto.PageApiResponse;
 import ktb.backend.dto.request.FoundRequest;
@@ -14,9 +15,11 @@ import ktb.backend.entity.Report;
 import ktb.backend.enums.ReportType;
 import ktb.backend.facade.ImageCommandFacade;
 import ktb.backend.facade.ReportQueryFacade;
+import ktb.backend.service.AiService;
 import ktb.backend.service.ReportService;
 import ktb.backend.utils.Snowflake;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +31,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://high-paw.click"})
 public class ReportController {
     private final ReportService reportService;
     private final ImageCommandFacade imageCommandFacade;
     private final Snowflake snowflake;
     private final ReportQueryFacade reportQueryFacade;
+    private final AiService aiService;
 
     @Operation(summary = "실종 신고", description = "내 반려 동물을 실종한 경우에 실종 관련 내용을 신고합니다.")
     @PostMapping("/report/missing")
@@ -42,14 +46,18 @@ public class ReportController {
             @ApiResponse(responseCode = "400", description = "invalid_request"),
             @ApiResponse(responseCode = "500", description = "internal_server_error")
     })
-    public ResponseEntity<Void> reportMissing(
+    public ResponseEntity<?> reportMissing(
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @RequestPart(value = "request") MissingRequest request
     ) {
         long id = snowflake.nextId();
         Report missingReport = reportService.createMissingReport(id, request);
         AiServerResponse aiServerResponse = imageCommandFacade.analyzeImages(images, missingReport, request.featureDetail());
-        return ResponseEntity.noContent().build();
+        byte[] flyer = aiService.getFlyer(images.getFirst(), request);
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"poster.png\"")
+            .contentType(MediaType.IMAGE_PNG)
+            .body(flyer);
     }
 
     @Operation(summary = "발견 신고", description = "실종 신고로 보이는 동물을 발견한 경우 해당 내용을 신고합니다.")
