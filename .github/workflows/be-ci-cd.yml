@@ -46,9 +46,9 @@ jobs:
           MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
 
           # AWS S3 설정 (필요한 경우)
-      #          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
-      #          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
-      #          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_S3_ACCESS_KEY: ${{ secrets.AWS_S3_ACCESS_KEY }}
+          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
 
   docker-build:
     needs: build-and-test
