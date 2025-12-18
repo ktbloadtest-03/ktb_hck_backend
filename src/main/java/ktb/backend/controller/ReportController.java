@@ -10,6 +10,7 @@ import ktb.backend.dto.request.MissingRequest;
 import ktb.backend.facade.ImageCommandFacade;
 import ktb.backend.facade.ImageQueryFacade;
 import ktb.backend.service.ReportService;
+import ktb.backend.utils.Snowflake;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
     private final ImageCommandFacade imageCommandFacade;
+    private final Snowflake snowflake;
 
     @Operation(summary = "실종 신고", description = "내 반려 동물을 실종한 경우에 실종 관련 내용을 신고합니다.")
     @PostMapping("/report/missing")
@@ -38,8 +40,9 @@ public class ReportController {
     public ResponseEntity<Void> reportMissing(
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @RequestBody MissingRequest request) {
-        //reportService.makeReport(request);
-        imageCommandFacade.saveImages(images);
+        long id = snowflake.nextId();
+        //reportService.makeReport(request, id);
+        //imageCommandFacade.saveImages(images, id);
         return ResponseEntity.noContent().build();
     }
 

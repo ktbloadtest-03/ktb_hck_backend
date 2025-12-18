@@ -22,12 +22,13 @@ import java.util.Objects;
 public class AiService {
     private final RestTemplate restTemplate;
 
-    @Value("${ai.server.analyze-url}")
+    @Value("${ai.server.url}")
     private String analyzeUrl;
 
-    public AiAnalysisResult analyze(List<MultipartFile> images) {
+    public AiAnalysisResult analyze(List<MultipartFile> images, long id) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         images.forEach(img -> body.add("images", img.getResource()));
+        body.add("id", id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

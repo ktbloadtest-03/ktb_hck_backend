@@ -40,4 +40,4 @@ springdoc:
 
 ai:
   server:
-    analyze-url: {AI_SERVER_ENDPOINT:test}
+    url: {AI_SERVER_ENDPOINT:test}
