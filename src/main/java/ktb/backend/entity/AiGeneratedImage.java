@@ -7,14 +7,9 @@ import lombok.Getter;
 @Getter
 public class AiGeneratedImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "information_id")
     private Report report;
-
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    private Image image;
 }

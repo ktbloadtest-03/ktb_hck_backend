@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ktb.backend.dto.AiServerResponse;
 import ktb.backend.dto.PageApiResponse;
+import ktb.backend.dto.request.FoundRequest;
 import ktb.backend.dto.request.MissingRequest;
 import ktb.backend.dto.response.GetReportResponse;
 import ktb.backend.entity.Report;
@@ -16,7 +17,7 @@ import ktb.backend.facade.ReportQueryFacade;
 import ktb.backend.service.ReportService;
 import ktb.backend.utils.Snowflake;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@CrossOrigin(origins = {"http://localhost:5173"})
 public class ReportController {
     private final ReportService reportService;
     private final ImageCommandFacade imageCommandFacade;
@@ -42,17 +44,24 @@ public class ReportController {
     })
     public ResponseEntity<Void> reportMissing(
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
-            @RequestBody MissingRequest request) {
+            @RequestPart(value = "request") MissingRequest request
+    ) {
         long id = snowflake.nextId();
-        //reportService.makeReport(request, id);
-        AiServerResponse aiServerResponse = imageCommandFacade.analyzeImages(images, id, request.featureDetail());
+        Report missingReport = reportService.createMissingReport(id, request);
+        AiServerResponse aiServerResponse = imageCommandFacade.analyzeImages(images, missingReport, request.featureDetail());
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "발견 신고", description = "실종 신고로 보이는 동물을 발견한 경우 해당 내용을 신고합니다.")
     @PostMapping("/report/found")
-    public ResponseEntity<Void> reportFound() {
-        return null;
+    public ResponseEntity<Void> reportFound(
+        @RequestPart(value = "images", required = false) List<MultipartFile> images,
+        @RequestPart(value = "request") FoundRequest request
+    ) {
+        long id = snowflake.nextId();
+        Report foundReport = reportService.createFoundReport(id, request);
+        imageCommandFacade.analyzeScores(images, foundReport);
+        return ResponseEntity.noContent().build();
     }
 
 
