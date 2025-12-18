@@ -4,10 +4,13 @@ import ktb.backend.dto.request.FoundRequest;
 import ktb.backend.dto.request.MissingRequest;
 import ktb.backend.entity.Location;
 import ktb.backend.entity.Report;
+import ktb.backend.enums.ReportType;
 import ktb.backend.repository.LocationRepository;
 import ktb.backend.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,5 +47,9 @@ public class ReportService {
     private Report findById(long id) {
         return reportRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("NOT_FOUND_REPORT"));
+    }
+
+    public Page<Report> findByReportType(ReportType reportType, int page, int size) {
+        return reportRepository.findByReportType(reportType, PageRequest.of(page-1,size));
     }
 }
