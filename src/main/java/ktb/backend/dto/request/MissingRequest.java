@@ -5,6 +5,7 @@ import ktb.backend.entity.Report;
 import ktb.backend.enums.AnimalType;
 import ktb.backend.enums.Gender;
 import ktb.backend.enums.ReportType;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ public record MissingRequest(
     LocalDateTime lostTime,
     double latitude,
     double longitude,
+    String locationName,
     String lostLocationDetail,
     String featureDetail
 ) {

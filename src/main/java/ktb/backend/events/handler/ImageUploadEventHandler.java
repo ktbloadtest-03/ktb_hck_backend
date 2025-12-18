@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 public class ImageUploadEventHandler {
     private final S3Service s3Service;
 
-    @Async
+    @Async("eventRelayExecutor")
     @EventListener
     public void handler(ImageUploadEvent event) {
         IntStream.range(0, event.imageEntities().size())
