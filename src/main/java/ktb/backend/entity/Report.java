@@ -12,16 +12,15 @@ import java.time.LocalDateTime;
 @Getter
 public class Report extends BaseEntity{
     // -- 공통 정보 --
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private ReportType reportType;
 
     private LocalDateTime caseTime;
 
-    @OneToOne(mappedBy = "report")
+    @OneToOne
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @Column(columnDefinition = "TEXT")

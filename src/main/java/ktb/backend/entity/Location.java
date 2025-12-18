@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(
@@ -19,8 +18,4 @@ public class Location {
 
     @Column(columnDefinition = "TEXT")
     private String detail;
-
-    @OneToOne
-    @JoinColumn(name = "report_id")
-    private Report report;
 }
