@@ -27,6 +27,8 @@ public class Information extends BaseEntity{
 
     private Gender gender;
 
+    private String petName;
+
     @OneToOne
     @JoinColumn(name = "report_id")
     private Report report;
