@@ -40,4 +40,4 @@ springdoc:
 
 ai:
   server:
-    url: {AI_SERVER_URL:test@url.com}
+    url: ${AI_SERVER_URL:http://localhost:5000}
