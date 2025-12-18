@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ktb.backend.dto.AiServerResponse;
 import ktb.backend.dto.request.MissingRequest;
 import ktb.backend.facade.ImageCommandFacade;
 import ktb.backend.facade.ImageQueryFacade;
@@ -41,7 +42,7 @@ public class ReportController {
             @RequestBody MissingRequest request) {
         long id = snowflake.nextId();
         //reportService.makeReport(request, id);
-        imageCommandFacade.analyzeImages(images, id, request.featureDetail());
+        AiServerResponse aiServerResponse = imageCommandFacade.analyzeImages(images, id, request.featureDetail());
         return ResponseEntity.noContent().build();
     }
 

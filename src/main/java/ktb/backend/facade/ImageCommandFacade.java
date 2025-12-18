@@ -1,10 +1,13 @@
 package ktb.backend.facade;
 
 import jakarta.transaction.Transactional;
-import ktb.backend.dto.AiAnalysisResult;
+import ktb.backend.dto.AiServerResponse;
 import ktb.backend.entity.Image;
+import ktb.backend.entity.Report;
+import ktb.backend.events.ImageUploadEvent;
 import ktb.backend.service.AiService;
 import ktb.backend.service.ImageService;
+import ktb.backend.service.ReportService;
 import ktb.backend.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,17 +21,16 @@ import java.util.List;
 public class ImageCommandFacade {
     private final AiService aiService;
     private final ApplicationEventPublisher eventPublisher;
-
-    private final S3Service s3Service;
     private final ImageService imageService;
 
     @Transactional
-    public void analyzeImages(List<MultipartFile> images, long id, String description) {
-        //ai로 전송
-        //s3로 업로드
-        AiAnalysisResult aiAnalysisResult = aiService.analyze(images, id, description);
+    public AiServerResponse analyzeImages(List<MultipartFile> imageFiles, long id, String description) {
+        AiServerResponse aiServerResponse = aiService.analyze(imageFiles, id, description);
 
-        List<Image> originalImages = images.stream()
+        List<Image> imageEntities = imageFiles.stream()
                 .map(img -> imageService.saveImage()).toList();
+
+        eventPublisher.publishEvent(new ImageUploadEvent(imageFiles, imageEntities));
+
     }
 }
