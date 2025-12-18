@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - name: Debug Docker username
-      - run: echo "DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}'"
+        run: echo "DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}'"
 
       - name: Checkout code
         uses: actions/checkout@v4
