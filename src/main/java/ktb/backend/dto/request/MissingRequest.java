@@ -7,14 +7,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record MissingRequest(
-        String petName,
-        AnimalType types,
-        Gender gender,
-        LocalDateTime lostTime,
-        double latitude,
-        double longitude,
-        String lostLocationDetail,
-        String featureDetail,
-        List<Long> lostPetImages
+    String email,
+    String phoneName,
+    String petName,
+    AnimalType types,
+    Gender gender,
+    String species,
+    LocalDateTime lostTime,
+    double latitude,
+    double longitude,
+    String lostLocationDetail,
+    String featureDetail
 ) {
 }
