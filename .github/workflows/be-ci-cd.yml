@@ -50,16 +50,6 @@ jobs:
       #          AWS_S3_SECRET_KEY: ${{ secrets.AWS_S3_SECRET_KEY }}
       #          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
 
-      - name: Build application JAR
-        run: ./gradlew bootJar
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: application-jar
-          path: build/libs/*.jar
-          retention-days: 7
-
   docker-build:
     needs: build-and-test
     runs-on: ubuntu-latest
