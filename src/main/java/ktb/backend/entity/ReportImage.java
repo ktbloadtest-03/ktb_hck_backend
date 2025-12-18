@@ -5,14 +5,14 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class InformationImage {
+public class ReportImage {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "information_id")
-    private Information information;
+    @JoinColumn(name = "report_id")
+    private Report report;
 
     @OneToOne
     @JoinColumn(name = "image_id")

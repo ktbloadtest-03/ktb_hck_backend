@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import ktb.backend.dto.APIResponse;
 import ktb.backend.dto.request.MissingRequest;
 import ktb.backend.facade.ImageCommandFacade;
 import ktb.backend.facade.ImageQueryFacade;

@@ -22,5 +22,5 @@ public class Location {
 
     @OneToOne
     @JoinColumn(name = "information_id")
-    private Information information;
+    private Report report;
 }
