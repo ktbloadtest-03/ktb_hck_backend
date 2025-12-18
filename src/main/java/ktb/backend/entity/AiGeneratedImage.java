@@ -12,7 +12,7 @@ public class AiGeneratedImage {
 
     @OneToOne
     @JoinColumn(name = "information_id")
-    private Information information;
+    private Report report;
 
     @OneToOne
     @JoinColumn(name = "image_id")
