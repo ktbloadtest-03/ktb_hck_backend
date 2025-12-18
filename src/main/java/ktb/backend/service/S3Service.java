@@ -1,6 +1,7 @@
 package ktb.backend.service;
 
 import ktb.backend.S3Properties;
+import ktb.backend.dto.response.ImageUrlResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
 import org.springframework.stereotype.Service;
@@ -8,8 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ public class S3Service {
 
     private final S3Properties s3Properties;
     private final S3Client s3Client;
+    private final S3Presigner preSigner;
 
     public void uploadPetImage(Long imageId, MultipartFile file) {
         try {
@@ -42,6 +48,13 @@ public class S3Service {
         s3Client.putObject(request, RequestBody.fromBytes(bytes));
     }
 
+    public ImageUrlResponse getPresignedUrls(List<Long> imageEntityIds) {
+        List<String> urls = imageEntityIds.stream()
+                .map(imageId -> getPreSignedUrl(PET_IMAGE_FOLDER, imageId.toString()))
+                .toList();
+        return ImageUrlResponse.from(urls);
+    }
+
     private String buildKey(String folder, Long imageId) {
         return String.join("/", folder, imageId.toString());
     }
@@ -59,6 +72,23 @@ public class S3Service {
                 .bucket(s3Properties.bucket())
                 .key(key)
                 .contentType("image/jpeg")
+                .build();
+    }
+
+    private String getPreSignedUrl(String folder, String filename) {
+        return preSigner
+                .presignGetObject(getObjectPresignRequest(folder, filename))
+                .url()
+                .toString();
+    }
+
+    private GetObjectPresignRequest getObjectPresignRequest(String folder, String filename) {
+        return GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(1))
+                .getObjectRequest(objectRequest ->
+                        objectRequest
+                                .bucket(s3Properties.bucket())
+                                .key(String.join("/", folder, filename)))
                 .build();
     }
 }
