@@ -131,8 +131,3 @@ jobs:
               d02kim/ktb-hackathon-backend:latest
           EOF
           
-          MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
-          MYSQL_HOST: ${{ secrets.RDS_HOST }}
-          MYSQL_PORT: ${{ secrets.RDS_PORT }}
-          MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
