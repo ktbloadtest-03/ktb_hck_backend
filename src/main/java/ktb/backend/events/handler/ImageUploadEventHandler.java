@@ -1,6 +1,7 @@
 package ktb.backend.events.handler;
 
 import ktb.backend.entity.Image;
+import ktb.backend.entity.ReportImage;
 import ktb.backend.events.ImageUploadEvent;
 import ktb.backend.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ImageUploadEventHandler {
         IntStream.range(0, event.imageEntities().size())
                 .parallel()
                 .forEach(i -> {
-                    Image imageEntity = event.imageEntities().get(i);
+                    ReportImage imageEntity = event.imageEntities().get(i);
                     MultipartFile file = event.imageFiles().get(i);
 
                     s3Service.uploadPetImage(

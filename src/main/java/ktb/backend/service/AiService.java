@@ -1,5 +1,6 @@
 package ktb.backend.service;
 
+import ktb.backend.dto.AiScoreResponse;
 import ktb.backend.dto.AiServerResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +35,21 @@ public class AiService {
 
         HttpEntity<?> request = new HttpEntity<>(body, headers);
 
-        ResponseEntity<AiServerResponse> response = restTemplate.postForEntity(analyzeUrl, request, AiServerResponse.class);
+        ResponseEntity<AiServerResponse> response = restTemplate.postForEntity(analyzeUrl + "/register", request, AiServerResponse.class);
 
+        return response.getBody();
+    }
+
+    public AiScoreResponse[] score(List<MultipartFile> images) {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        images.forEach(img -> body.add("file", img.getResource()));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        HttpEntity<?> request = new HttpEntity<>(body, headers);
+
+        ResponseEntity<AiScoreResponse[]> response = restTemplate.postForEntity(analyzeUrl + "/search", request, AiScoreResponse[].class);
         return response.getBody();
     }
 }
