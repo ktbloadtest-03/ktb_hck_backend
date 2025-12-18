@@ -25,10 +25,11 @@ public class AiService {
     @Value("${ai.server.url}")
     private String analyzeUrl;
 
-    public AiAnalysisResult analyze(List<MultipartFile> images, long id) {
+    public AiAnalysisResult analyze(List<MultipartFile> images, long id, String description) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        images.forEach(img -> body.add("images", img.getResource()));
+        images.forEach(img -> body.add("files", img.getResource()));
         body.add("id", id);
+        body.add("description", description);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

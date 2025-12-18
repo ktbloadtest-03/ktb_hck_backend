@@ -2,11 +2,14 @@ package ktb.backend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import ktb.backend.dto.AiAnalysisResult;
+import ktb.backend.dto.request.TestAiRequest;
 import ktb.backend.service.AiService;
 import ktb.backend.utils.Snowflake;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +29,16 @@ public class DevController {
     }
 
 
-    @PostMapping("/dev/ai/test")
-    public ResponseEntity<AiAnalysisResult> testAi(
-            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    @PostMapping(value = "/dev/ai/test", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE
+    })
+    public ResponseEntity<Void> testAi(
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
+            @RequestPart("description") String description
     ) {
         long id = snowflake.nextId();
-        AiAnalysisResult aiAnalysisResult = aiService.analyze(images, id);
-        return ResponseEntity.ok(aiAnalysisResult);
+        aiService.analyze(images, id,description);
+        return ResponseEntity.noContent().build();
     }
 }

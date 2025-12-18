@@ -41,7 +41,7 @@ public class ReportController {
             @RequestBody MissingRequest request) {
         long id = snowflake.nextId();
         //reportService.makeReport(request, id);
-        //imageCommandFacade.saveImages(images, id);
+        imageCommandFacade.analyzeImages(images, id, request.featureDetail());
         return ResponseEntity.noContent().build();
     }
 

@@ -23,10 +23,10 @@ public class ImageCommandFacade {
     private final ImageService imageService;
 
     @Transactional
-    public void analyzeImages(List<MultipartFile> images, long id) {
+    public void analyzeImages(List<MultipartFile> images, long id, String description) {
         //ai로 전송
         //s3로 업로드
-        AiAnalysisResult aiAnalysisResult = aiService.analyze(images, id);
+        AiAnalysisResult aiAnalysisResult = aiService.analyze(images, id, description);
 
         List<Image> originalImages = images.stream()
                 .map(img -> imageService.saveImage()).toList();
