@@ -128,6 +128,10 @@ jobs:
               -e SPRING_DATASOURCE_URL="jdbc:mysql://${{ secrets.RDS_HOST }}:3306/${{ secrets.RDS_DATABASE }}?useSSL=false&serverTimezone=UTC" \
               -e SPRING_DATASOURCE_USERNAME="${{ secrets.RDS_USERNAME }}" \
               -e SPRING_DATASOURCE_PASSWORD="${{ secrets.RDS_PASSWORD }}" \
-              d02kim/ktb-hackathon-backend:latest
+              -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_S3_ACCESS_KEY }}" \
+              -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_S3_SECRET_KEY }}" \
+              -e AWS_REGION="ap-northeast-2" \
+              -e AWS_S3_BUCKET="${{ secrets.AWS_S3_BUCKET }}" \
+              ${{ secrets.DOCKER_USERNAME }}/ktb-hackathon-backend:latest
           EOF
           
