@@ -59,6 +59,7 @@ public class AiService {
         body.add("name", missingRequest.petName());
         body.add("contact", missingRequest.phoneNumber());
         body.add("notes", missingRequest.featureDetail());
+        body.add("file", image.getResource());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
