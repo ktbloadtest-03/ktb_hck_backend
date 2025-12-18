@@ -44,7 +44,6 @@ public class DevController {
 
     @PostMapping("/dev/mail/test")
     public ResponseEntity<Void> testMail() throws MessagingException {
-        mailService.sendEmailWithHtmlContent("");
         return null;
     }
 }

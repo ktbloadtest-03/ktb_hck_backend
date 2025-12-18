@@ -6,6 +6,7 @@ import ktb.backend.dto.AiServerResponse;
 import ktb.backend.entity.Report;
 import ktb.backend.entity.ReportImage;
 import ktb.backend.events.ImageUploadEvent;
+import ktb.backend.events.LostPetFoundEvent;
 import ktb.backend.service.AiService;
 import ktb.backend.service.ImageService;
 import ktb.backend.service.ReportImageService;
@@ -51,9 +52,8 @@ public class ImageCommandFacade {
             .map(img -> reportImageService.saveReportImage(report))
             .toList();
 
-        Arrays.stream(aiScoreResponses).forEach(aiScoreResponse -> {
-            log.info("{}", aiScoreResponse.toString());
-        });
-        // TODO: 이메일 전송
+        Arrays.stream(aiScoreResponses)
+                .filter(response -> response.score() >= 0.3)
+                .forEach(response -> eventPublisher.publishEvent(new LostPetFoundEvent(report, imageFiles.getFirst())));
     }
 }

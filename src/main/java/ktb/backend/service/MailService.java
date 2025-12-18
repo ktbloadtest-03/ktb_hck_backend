@@ -3,11 +3,16 @@ package ktb.backend.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,29 +30,66 @@ public class MailService {
         }
     }
 
-    public void sendEmailWithHtmlContent(String to)
-            throws MessagingException {
+    public void sendEmailWithHtmlContent(String to, MultipartFile image)
+            throws MessagingException, IOException {
         String subject = "[HighPaw] 신고 접수 안내";
-        String htmlContent = "<html>" +
-                "<body>" +
-                "<img src='https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68' " +
-                "alt='Logo' " +
-                "style='width: 200px; height: auto; margin-bottom: 20px;'>" +
-                "<p>안녕하세요, HighPaw 팀입니다.</p>" +
-                "<p>신고가 성공적으로 접수되었음을 메일을 통해 알려드립니다.</p>" +
-                "<br><p>내역확인을 원하실 경우 회원가입을 진행해주시면 감사하겠습니다.</p>" +
-                "<br><p style = 'font-weight: bold;'>Hipaw 사이트 링크 : " +
-                "<a href='https://high-paw.click'>바로가기</a>" +
-                "</p>" +
-                "<br><p>감사합니다.</p>" +
-                "</body>" +
-                "</html>";
+        String cid = "reportImage";
 
-        MimeMessage htmlEmailForm = createHtmlEmailForm(to,subject,htmlContent);
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper =
+                new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setTo(to);
+        helper.setSubject(subject);
+
+        String htmlContent =
+                "<html>" +
+                        "<body style='margin:0; padding:24px; background:#f6f6f6;'>" +
+                        "<table width='100%' cellpadding='0' cellspacing='0'>" +
+                        "<tr>" +
+                        "<td align='center'>" +
+                        "<table width='600' cellpadding='0' cellspacing='0' " +
+                        "style='background:#ffffff; padding:24px; border-radius:12px;'>" +
+                        "<tr>" +
+                        "<td align='center'>" +
+
+                        "<img src='cid:" + cid + "' " +
+                        "alt='Detected Image' " +
+                        "width='500' " +
+                        "style='display:block; max-width:100%; height:auto; " +
+                        "margin-bottom:24px; border-radius:14px;' />" +
+
+                        "<p>안녕하세요, HighPaw 팀입니다.</p>" +
+                        "<p>실종 신고 접수해주신 반려 동물과 유사한 반려동물이 발견되어 사진과 함께 메일 드립니다.</p>" +
+                        "<br><p>아래 링크를 클릭해 사이트에서 정보를 확인하실 수 있습니다.</p>" +
+                        "<br><p style='font-weight: bold;'>Hipaw 사이트 링크 : " +
+                        "<a href='https://high-paw.click'>바로가기</a>" +
+                        "</p>" +
+                        "<br><p>감사합니다.</p>" +
+
+                        "</td>" +
+                        "</tr>" +
+                        "</table>" +
+                        "</td>" +
+                        "</tr>" +
+                        "</table>" +
+                        "</body>" +
+                        "</html>";
+
+
+        helper.setText(htmlContent, true);
+
+
+        helper.addInline(
+                cid,
+                new ByteArrayResource(image.getBytes()),
+                Optional.ofNullable(image.getContentType()).orElse("image/jpeg")
+        );
+
         try {
-            javaMailSender.send(htmlEmailForm);
+            javaMailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("CANNOT_SEND_EMAIL");
+            throw new RuntimeException("CANNOT_SEND_EMAIL", e);
         }
     }
 
