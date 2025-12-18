@@ -5,8 +5,8 @@ spring:
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:ktb_hackathon}
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:00000000}
+    username: ${MYSQL_USERNAME:admin}
+    password: ${MYSQL_PASSWORD:adminadmin1234}
   servlet:
     multipart:
       max-file-size: 10MB
