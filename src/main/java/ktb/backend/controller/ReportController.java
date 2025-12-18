@@ -31,7 +31,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://high-paw.click"})
 public class ReportController {
     private final ReportService reportService;
     private final ImageCommandFacade imageCommandFacade;
