@@ -11,7 +11,7 @@ public class Location {
     private Long id;
 
     @Column(
-            name = "location",
+            name = "coordinate",
             columnDefinition = "POINT",
             nullable = false
     )

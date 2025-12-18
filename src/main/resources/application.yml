@@ -2,6 +2,11 @@ server:
   port: 8080
 
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ktb_hackathon
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:00000000}
   servlet:
     multipart:
       max-file-size: 10MB
@@ -19,11 +24,6 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-    datasource:
-      url: jdbc:mysql://localhost:3306/ktb_hackathon
-      driverClassName: com.mysql.cj.jdbc.Driver
-      username: ${MYSQL_USERNAME:root}
-      password: ${MYSQL_PASSWORD:password}
 
 springdoc:
   api-docs:

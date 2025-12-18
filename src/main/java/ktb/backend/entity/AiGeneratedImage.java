@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class AIGeneratedImage {
+public class AiGeneratedImage {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
