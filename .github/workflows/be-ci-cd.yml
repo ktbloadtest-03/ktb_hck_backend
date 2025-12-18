@@ -125,5 +125,14 @@ jobs:
             # 5. 새 컨테이너 실행
             docker run -d --name backend \
               -p 8080:8080 \
-              ${{ secrets.DOCKER_USERNAME }}/ktb-hackathon-backend:latest
+              -e SPRING_DATASOURCE_URL="jdbc:mysql://${{ secrets.RDS_HOST }}:3306/${{ secrets.RDS_DATABASE }}?useSSL=false&serverTimezone=UTC" \
+              -e SPRING_DATASOURCE_USERNAME="${{ secrets.RDS_USERNAME }}" \
+              -e SPRING_DATASOURCE_PASSWORD="${{ secrets.RDS_PASSWORD }}" \
+              d02kim/ktb-hackathon-backend:latest
           EOF
+          
+          MYSQL_USERNAME: ${{ secrets.RDS_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          MYSQL_HOST: ${{ secrets.RDS_HOST }}
+          MYSQL_PORT: ${{ secrets.RDS_PORT }}
+          MYSQL_DATABASE: ${{ secrets.RDS_DATABASE }}
