@@ -5,11 +5,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Image extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    public Image(Long id) {
+        this.id = id;
+    }
 }

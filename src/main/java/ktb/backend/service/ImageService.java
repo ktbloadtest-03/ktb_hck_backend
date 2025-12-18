@@ -12,8 +12,9 @@ import java.util.List;
 public class ImageService {
     private final ImageRepository imageRepository;
 
-    public Image saveImage() {
-        return new Image();
+    public Image saveImage(Long id) {
+        Image image = new Image(id);
+        return imageRepository.save(image);
     }
 
     public Image findById(Long imageId) {

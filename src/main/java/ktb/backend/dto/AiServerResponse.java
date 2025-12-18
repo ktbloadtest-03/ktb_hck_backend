@@ -1,7 +1,9 @@
 package ktb.backend.dto;
 
 public record AiServerResponse(
-        double accuracy,
-        String leafletImageBase64
+        String status,
+        Long registered_id,
+        Long count,
+        String description
 ) {
 }
