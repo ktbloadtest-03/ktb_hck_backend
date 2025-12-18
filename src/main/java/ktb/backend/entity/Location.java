@@ -15,7 +15,7 @@ public class Location {
             columnDefinition = "POINT",
             nullable = false
     )
-    private Object location;
+    private Object coordinate;
 
     @Column(columnDefinition = "TEXT")
     private String detail;

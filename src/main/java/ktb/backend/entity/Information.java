@@ -19,7 +19,7 @@ public class Information extends BaseEntity{
     @Column(columnDefinition = "TEXT")
     private String additionalInfo;
 
-    private AnimalType type;
+    private AnimalType types;
 
     private String species;
 
